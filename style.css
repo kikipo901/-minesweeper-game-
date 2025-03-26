@@ -1,0 +1,138 @@
+/* 整體頁面美化 */
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(to bottom, #9eb5f0, #a6d0f5);
+  text-align: center;
+  margin: 20px;
+  font-family: 'Poppins', sans-serif; /* 使用 Google Fonts 的 Poppins 字體 */
+  font-weight: 400; /* 預設字重 */
+}
+/* 調整網格間距，讓格子不擠在一起 */
+#board {
+  display: grid;
+  margin: 20px auto;
+  gap: 20px; /* 增加格子間距 */
+  justify-content: center;
+  width: fit-content; /* 根據內容自動調整寬度 */
+}
+
+/* 標題樣式 */
+h1 {
+  font-size: 3rem;
+  color: #333;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  font-weight: 600; /* 加粗效果 */
+  font-size: 3rem; /* 放大字體 */
+  color: #2c3e50; /* 深灰色，讓標題更有層次感 */
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1); /* 添加輕微陰影 */
+}
+
+/* 輸入框與按鈕樣式 */
+label {
+  margin: 10px;
+  font-size: 1.2rem;
+  color: #333;
+  font-weight: 500; /* 適中字重 */
+  font-size: 1.2rem; /* 字體大小 */
+  font-family: 'Patrick Hand', cursive; /* 使用 Google Fonts 的 Patrick Hand 字體 */
+  font-size: 1.5rem; /* 調整字體大小 */
+  color: #163f75; /* 可愛的粉色 */
+  letter-spacing: 1px; /* 增加字母間距，讓字體更俏皮 */
+}
+
+input[type="number"] {
+  font-family: 'Patrick Hand', cursive; /* 保持字體一致 */
+  font-size: 1.3rem; /* 字體大小 */
+  border: 2px solid #2b054d; /* 粉色邊框 */
+  border-radius: 10px; /* 圓角讓輸入框更可愛 */
+  padding: 5px;
+  outline: none; /* 去除點擊時的藍色邊框 */
+}
+button {
+  padding: 8px 16px;
+  margin: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  background-color: #4a90e2;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s;
+  font-family: 'Patrick Hand', cursive; /* 一致的可愛字體 */
+  background-color: #082867; /* 淡粉色背景 */
+  color: white; /* 白色字體 */
+  border: none; /* 去除邊框 */
+  padding: 10px 20px;
+  border-radius: 20px; /* 圓角按鈕 */
+  font-size: 1.3rem;
+  cursor: pointer; /* 滑鼠指向時變成手型 */
+  transition: background-color 0.3s; /* 加入過渡效果 */
+}
+
+button:hover {
+  background-color: #3a78c2;
+  transform: scale(1.1);
+  background-color: #140a51; /* 懸停時變深粉色 */
+}
+
+
+
+/* 格子樣式 */
+.cell {
+  width: 80px;   /* 增加格子寬度 */
+  height: 80px;  /* 增加格子高度 */
+  font-size: 24px; /* 內容字體大小 */
+  background: #cfd9e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #555; /* 邊框讓格子更清晰 */
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  font-weight: 600; /* 粗體讓數字更明顯 */
+  font-size: 1.3rem; /* 稍微加大字體 */
+  box-sizing: border-box; /* 確保 padding 不影響大小 */
+
+}
+
+
+.alert-message {
+  font-weight: 700; /* 加粗 */
+  font-size: 2rem; /* 加大字體 */
+  color: #e74c3c; /* 顯眼的紅色 */
+  animation: pulse 1.5s infinite; /* 增加跳動動畫 */
+}
+
+/* 已開啟格子樣式 */
+.cell.open {
+  background: #eef4fc;
+  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: default;
+}
+
+/* 地雷樣式 */
+.cell.mine {
+  background: #ff6961;
+  animation: shake 0.5s ease;
+}
+
+/* 插旗樣式 */
+.cell.flag {
+  color: #e74c3c;
+}
+
+/* Shake 動畫效果 */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}

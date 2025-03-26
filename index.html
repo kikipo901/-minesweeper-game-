@@ -1,0 +1,155 @@
+<link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Fonts: Poppins 字體 -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Patrick Hand 字體 -->
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+  <title>自訂踩地雷遊戲</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  
+  <h1>踩地雷遊戲</h1>
+
+  <!-- 玩家輸入格子數與地雷數 -->
+  <label>行數: <input type="number" id="rowsInput" value="8" min="2"></label>
+  <label>列數: <input type="number" id="colsInput" value="8" min="2"></label>
+  <label>地雷數: <input type="number" id="mineInput" value="10" min="1"></label>
+  <button onclick="startGame()">開始遊戲</button>
+  <button id="resetButton" style="display: none;" onclick="startGame()">重新開始遊戲</button>
+
+  <div id="board"></div>
+
+  <script>
+    let board, rows, cols, mineCount, mines;
+
+    // 啟動遊戲
+    function startGame() {
+      rows = parseInt(document.getElementById("rowsInput").value);
+      cols = parseInt(document.getElementById("colsInput").value);
+      mineCount = parseInt(document.getElementById("mineInput").value);
+
+      if (mineCount >= rows * cols) {
+        alert("地雷數不能超過格子總數！");
+        return;
+      }
+
+      // 清空舊遊戲
+      const boardContainer = document.getElementById("board");
+      boardContainer.innerHTML = "";
+
+      // 設定網格樣式
+boardContainer.style.display = "grid";
+boardContainer.style.gridTemplateColumns = `repeat(${cols}, 80px)`; // 統一為 80px
+boardContainer.style.gridGap = "5px"; // 和 CSS 中的 gap 一致
+
+      // 初始化變數
+      mines = Array(rows * cols).fill(0);
+
+      // 隨機放置地雷
+      let count = 0;
+      while (count < mineCount) {
+        let randomIndex = Math.floor(Math.random() * (rows * cols));
+        if (mines[randomIndex] !== "M") {
+          mines[randomIndex] = "M";
+          count++;
+        }
+      }
+
+      // 建立網格
+      for (let i = 0; i < rows * cols; i++) {
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.dataset.index = i;
+
+        cell.addEventListener("click", revealCell);
+        cell.addEventListener("contextmenu", markFlag);
+
+        boardContainer.appendChild(cell);
+      }
+    }
+
+    // 顯示格子內容 (更新地雷判斷)
+    function revealCell(e) {
+      const index = parseInt(e.target.dataset.index);
+      const cell = e.target;
+
+      // 如果已經打開，則不重複操作
+      if (cell.classList.contains("open")) return;
+
+      // 如果是地雷，結束遊戲
+      if (mines[index] === "M") {
+        cell.classList.add("mine");
+        cell.innerText = "💣";
+        showResetMessage("💥 Game Over! 你踩到地雷了！");
+        return;
+      }
+
+      // 計算並顯示周圍地雷數
+      let count = getMineCount(index);
+      cell.classList.add("open");
+      if (count > 0) cell.innerText = count;
+
+      // 每次打開格子後，檢查是否達成勝利條件
+      checkWin();
+    }
+
+    // 右鍵插旗功能
+    function markFlag(e) {
+      e.preventDefault();
+      const cell = e.target;
+      if (!cell.classList.contains("open")) {
+        cell.innerText = cell.innerText === "🚩" ? "" : "🚩";
+      }
+    }
+
+    // 計算周圍地雷數
+    function getMineCount(index) {
+      let count = 0;
+      const directions = [-1, 1, -cols, cols, -cols - 1, -cols + 1, cols - 1, cols + 1];
+      directions.forEach(offset => {
+        const neighbor = index + offset;
+        const isLeftEdge = (index % cols === 0);
+        const isRightEdge = (index % cols === cols - 1);
+
+        if (isLeftEdge && (offset === -1 || offset === -cols - 1 || offset === cols - 1)) return;
+        if (isRightEdge && (offset === 1 || offset === -cols + 1 || offset === cols + 1)) return;
+
+        if (neighbor >= 0 && neighbor < rows * cols && mines[neighbor] === "M") {
+          count++;
+        }
+      });
+      return count;
+    }
+
+    // 顯示重置提示
+    function showResetMessage(message) {
+      alert(message);
+      document.getElementById("resetButton").style.display = "block"; // 顯示重置按鈕
+    }
+
+    // 檢查是否勝利
+    function checkWin() {
+      const cells = document.querySelectorAll(".cell");
+      let openedCount = 0;
+
+      // 計算已打開的格子數量
+      cells.forEach(cell => {
+        if (cell.classList.contains("open")) openedCount++;
+      });
+
+      // 如果打開的格子數量等於 "總格子數 - 地雷數"，表示玩家勝利
+      if (openedCount === rows * cols - mineCount) {
+        showResetMessage("🎉 恭喜你，成功過關！");
+      }
+    }
+
+    // 預設啟動遊戲
+    startGame();
+  </script>
+</body>
+</html>
